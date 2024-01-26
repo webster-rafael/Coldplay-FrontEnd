@@ -6,7 +6,7 @@
     <title>Cadastro</title>
     <link href="output.css" rel="stylesheet">
 </head>
-<body class="flex text-white items-center justify-center w-full h-screen font-dm bg-gradient-to-br from-gray-900 to-gray-900 mobile:bg-[url('/img/bg-login.jpg')] bg-center">
+<body class="flex text-white items-center justify-center w-full h-screen font-dm bg-gradient-to-br from-gray-900 to-gray-900 mobile:bg-[url('img/bg-login.jpg')] bg-center">
     <section class="w-4/6 h-[450px] rounded-2xl bg-gray-950 flex shadow-[0px_10px_15px] shadow-zinc-950 windscreen:w-3/6 mobile:w-[350px] mobile:h-[550px] tablet:w-5/6 tablet:h-[550px] windscreen:h-[550px]">
         <section class="w-5/12 flex flex-col mobile:w-full tablet:w-10/12" id="form">
             <form class="flex flex-col items-center" action="">
@@ -34,6 +34,8 @@
                     <input class="w-full py-2 px-2 text-sm text-center bg-gray-900 border border-[#4158D0] border-b-[#4158D0] border-r-[#bc1eb2] border-t-[#bc1eb2] rounded-full invalid:bg-red-700 focus:border-2 focus:border-span appearance-none outline-none" type="password" id="confirmarSenha">
                 </label>
 
+                <div class="w-full text-red-700 text-sm flex justify-center items-center text-center" id="errorSenha"></div>
+
                 <button class="bg-gradient-to-tr from[#4158D0] via-[#bc1eb2] to[#000] w-4/6 py-1 rounded-xl hover:bg-gradient-to-tr hover:from-[#4158D0] hover:via-[#1EE0E1] hover:to-[#000] mobile:w-5/6 tablet:w-5/6" type="submit">Cadastrar</button>
                 <div class="flex">
                     <p class="text-xs pr-1 pt-2 opacity-85">Já tem uma Conta?</p>
@@ -44,12 +46,12 @@
             </form>
 
             <div class="w-ful flex justify-center py-2 desktop:hidden">
-                <img class="w-[100px]" src="../img/logo-removebg-preview.png" alt="">
+                <img class="w-[100px]" src="img/logo-removebg-preview.png" alt="">
             </div>
         </section>
-        <section class="flex basis-7/12 bg-[url('/img/bg-login.jpg')] bg-center rounded-r-2xl shadow-[inset_300px_30px_600px_-100px_theme(colors.gray.950)] mobile:hidden" id="picture">
+        <section class="flex basis-7/12 bg-[url('img/bg-login.jpg')] bg-center rounded-r-2xl shadow-[inset_300px_30px_600px_-100px_theme(colors.gray.950)] mobile:hidden" id="picture">
             <div class="w-full flex items-start justify-end pr-4 pt-4">
-                <img class="w-[130px] rounded-full" src="../img/logo.jpg" alt="">
+                <img class="w-[130px] rounded-full" src="img/logo.jpg" alt="">
             </div>
             
         </section>
@@ -68,8 +70,11 @@
 
             const nome = document.querySelector('input[type="text"]').value;
             const email = document.querySelector('input[type="email"]').value;
-            const senha = document.querySelector('input[type="password"]').value;
-            const confirmaSenha = document.querySelector('input[type="password"]').value;
+            const senha = document.getElementById('senha').value;
+            const confirmaSenha = document.getElementById('confirmarSenha').value;
+            const errorSenha = document.getElementById('errorSenha')
+
+            
             
             // Construa o corpo da solicitação
             const requestBody = {
@@ -79,8 +84,14 @@
                 confirmpassword: confirmaSenha
             };
 
+            if (senha !== confirmaSenha) {
+                errorSenha.innerHTML = ("As senhas não combinam!")
+            }
+
+
+
             // Faça a solicitação para o seu backend
-            fetch('http://localhost:3000/auth/register', {
+            fetch('https://coldplay-chi.vercel.app/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

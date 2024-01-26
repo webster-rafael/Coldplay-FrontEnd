@@ -6,7 +6,7 @@
     <title>Login Coldplay</title>
     <link href="output.css" rel="stylesheet">
 </head>
-<body class="flex text-white items-center justify-center w-full h-screen font-dm bg-gradient-to-br from-gray-900 to-gray-900 mobile:bg-[url('/img/bg-login.jpg')] bg-center">
+<body class="flex text-white items-center justify-center w-full h-screen font-dm bg-gradient-to-br from-gray-900 to-gray-900 mobile:bg-[url('img/bg-login.jpg')] bg-center">
     <section class="w-4/6 h-[450px] rounded-2xl bg-gray-950 flex shadow-[0px_10px_15px] shadow-zinc-950 windscreen:w-3/6 mobile:w-[350px] mobile:h-[500px] tablet:w-5/6 tablet:h-[510px] windscreen:h-[500px]">
         <section class="w-5/12 flex flex-col mobile:w-full tablet:w-10/12" id="form">
             <form class="flex flex-col items-center" action="" id="loginForm">
@@ -36,12 +36,12 @@
             </form>
 
             <div class="w-ful flex justify-center py-2 desktop:hidden">
-                <img class="w-[100px]" src="../img/logo-removebg-preview.png" alt="">
+                <img class="w-[100px]" src="img/logo-removebg-preview.png" alt="">
             </div>
         </section>
-        <section class="flex basis-7/12 bg-[url('/img/bg-login.jpg')] bg-center rounded-r-2xl shadow-[inset_300px_30px_600px_-100px_theme(colors.gray.950)] mobile:hidden" id="picture">
+        <section class="flex basis-7/12 bg-[url('img/bg-login.jpg')] bg-center rounded-r-2xl shadow-[inset_300px_30px_600px_-100px_theme(colors.gray.950)] mobile:hidden" id="picture">
             <div class="w-full flex items-start justify-end pr-4 pt-4">
-                <img class="w-[130px] rounded-full" src="../img/logo.jpg" alt="">
+                <img class="w-[130px] rounded-full" src="img/logo.jpg" alt="">
             </div>
         </section>
     </section>
@@ -49,56 +49,59 @@
     <!-- SCRIPT -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const loginForm = document.getElementById('loginForm');
-            const senhaInput = document.getElementById('senha');
-            const senhaError = document.getElementById('senhaError');
-            const entrarButton = document.getElementById('entrarButton');
-    
-            loginForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // Evita o comportamento padrão do formulário
-    
-                const email = document.getElementById('email').value;
-                const senha = senhaInput.value;
-    
-                // Remova classes de erro anteriores
-                senhaInput.classList.remove('invalid:bg-red-700');
-                senhaError.textContent = '';
-    
-                // Faça a solicitação para o seu backend
-                fetch('https://coldplay-chi.vercel.app/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password: senha })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Autenticação falhou');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Se a autenticação for bem-sucedida, redirecione para index.html
-                    window.location.href = './index.html';
-                })
-                .catch(error => {
-                    // Se a autenticação falhar, você pode exibir uma mensagem de erro no input e alterar o texto do botão
-                    senhaInput.classList.add('invalid:bg-red-700');
-                    senhaError.textContent = 'Senha inválida';
-                    
-                    // Mude o texto e o estilo do botão
-                    entrarButton.innerHTML = 'Error';
-                    entrarButton.style.background = '#FF0000';  // Muda a cor de fundo diretamente para garantir
-                });
-            });
-    
-            // Adiciona um evento de foco ao campo de senha para redefinir o estilo do botão
-            senhaInput.addEventListener('focus', function () {
-                entrarButton.innerHTML = 'Entrar';
-                entrarButton.style.background = 'linear-gradient(to top right, #000, #bc1eb2, #000)';
-            });
+    const loginForm = document.getElementById('loginForm');
+    const senhaInput = document.getElementById('senha');
+    const senhaError = document.getElementById('senhaError');
+    const entrarButton = document.getElementById('entrarButton');
+
+    loginForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Evita o comportamento padrão do formulário
+
+        const email = document.getElementById('email').value;
+        const senha = senhaInput.value;
+
+        // Remova classes de erro anteriores
+        senhaInput.classList.remove('invalid:bg-red-700');
+        senhaError.textContent = '';
+
+        // Faça a solicitação para o seu backend
+        fetch('https://coldplay-chi.vercel.app/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password: senha })
+        })
+        .then(response => {
+            if (response.status === 404) {
+                throw new Error('Usuário não encontrado');
+            } else if (!response.ok) {
+                throw new Error('Autenticação falhou');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Se a autenticação for bem-sucedida, redirecione para index.html
+            window.location.href = './index.html';
+        })
+        .catch(error => {
+            // Se a autenticação falhar, exiba a mensagem de erro no input e altere o texto do botão
+            senhaInput.classList.add('invalid:bg-red-700');
+            senhaError.textContent = error.message;
+
+            // Mude o texto e o estilo do botão
+            entrarButton.innerHTML = 'Error';
+            entrarButton.style.background = '#FF0000';
         });
+    });
+
+    // Adiciona um evento de foco ao campo de senha para redefinir o estilo do botão
+    senhaInput.addEventListener('focus', function () {
+        entrarButton.innerHTML = 'Entrar';
+        entrarButton.style.background = 'linear-gradient(to top right, #000, #bc1eb2, #000)';
+    });
+});
+
     </script>
 
 </body>
